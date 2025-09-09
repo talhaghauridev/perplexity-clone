@@ -57,3 +57,7 @@ coverage/
 # Cache directories
 .cache/
 .parcel-cache/
+
+# Prettier files
+.prettierrc
+.prettierignore
