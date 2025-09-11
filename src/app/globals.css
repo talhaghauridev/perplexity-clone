@@ -5,9 +5,9 @@
 
 :root {
   --background: oklch(0.9902 0.0039 106.4713);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0.3039 0.04 213.68);
   --card: oklch(0.9902 0.0039 106.4713);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.3039 0.04 213.68);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.6384 0.0765 206.7239);
@@ -59,9 +59,9 @@
 
 .dark {
   --background: oklch(0.2167 0.0015 197.0424);
-  --foreground: oklch(0.985 0 0);
+  --foreground: oklch(0.9299 0.0066 5.6337);
   --card: oklch(0.2457 0.003 196.9623);
-  --card-foreground: oklch(0.985 0 0);
+  --card-foreground: oklch(0.9299 0.0066 5.6337);
   --popover: oklch(0.269 0 0);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.6493 0.0991 205.4364);
@@ -160,6 +160,61 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+}
+
+/* Custom Scrollbar Styles */
+.custom-scrollbar {
+  overflow-y: auto;
+  scrollbar-width: thin; /* For Firefox */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #3c3c3c;
+  border-radius: 20px;
+  min-height: 20px;
+  height: 10px !important;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+}
+
+@layer utilities {
+  /* Clean Eye button in input */
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-text-fill-color: hsl(var(--primary)) !important;
+    background-color: inherit !important;
+    background-image: none !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  input:-ms-input-placeholder {
+    color: hsl(var(--primary)) !important;
+  }
+
+  input:-moz-autofill {
+    color: hsl(var(--primary)) !important;
+    background-color: inherit !important;
+    background-image: none !important;
+  }
+  input::placeholder {
+    font-size: 14px;
+  }
 }
 
 @layer base {
