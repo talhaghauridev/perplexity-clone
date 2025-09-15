@@ -1,12 +1,12 @@
 'use client';
 
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
-import { ClaudeSidebar } from '@/components/claude-sidebar';
+import AppSidebar from '../components/sidebar';
 
 export default function HomePage() {
   return (
     <SidebarProvider defaultOpen={true}>
-      <ClaudeSidebar />
+      <AppSidebar />
       <SidebarInset>
         <main className="flex-1 p-6">
           <div className="mx-auto max-w-4xl">
