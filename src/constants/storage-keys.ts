@@ -14,4 +14,5 @@ export const STORAGE_KEYS = {
   ONBOARDING: {
     COMPLETED: 'onboarding-completed',
   },
+  SIDEBAR_COOKIE_NAME: 'sidebar_state',
 } as const;
