@@ -27,7 +27,7 @@ html {
 }
         `}</style>
       </head>
-      <body>
+      <body className="bg-background">
         <Providers>{children}</Providers>
       </body>
     </html>
