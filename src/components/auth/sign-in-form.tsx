@@ -38,7 +38,7 @@ export function SignInForm() {
                 placeholder="name@example.com"
                 disabled={isLoading}
               />
-              <div className="grid gap-2">
+              <div className="grid gap-0">
                 <div className="flex items-center">
                   <Label
                     htmlFor="password"

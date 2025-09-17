@@ -2,7 +2,7 @@ import React, { forwardRef, memo, useMemo } from 'react';
 import { Control, FieldPath, FieldValues, useFormContext } from 'react-hook-form';
 import { FormControl, FormField, FormItem, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Label } from '../ui/label';
 import { cn } from '@/lib/utils';
 import { PasswordInput } from '../ui/password-input';
@@ -39,65 +39,31 @@ interface InputFormProps<TFieldValues extends FieldValues>
   }) => React.ReactElement;
 }
 
+const variants = {
+  visible: { opacity: 1, height: 'auto', marginTop: 6 },
+  hidden: { opacity: 0, height: 0, marginTop: 0 },
+};
+
 const AnimatedFormMessage = ({ fieldState }: { fieldState: any }) => {
   const isError = useMemo(
     () => fieldState.error && fieldState.error?.message,
     [fieldState.error?.message]
   );
   return (
-    <div className={cn('hidden', isError && 'flex')}>
-      <AnimatePresence>
-        {isError && (
-          <motion.div
-            initial={{
-              opacity: 0,
-              height: 0,
-              marginTop: 6,
-            }}
-            animate={{
-              opacity: 1,
-              height: 'auto',
-              marginTop: 0,
-            }}
-            exit={{
-              opacity: 0,
-              height: 0,
-              marginTop: 0,
-            }}
-            transition={{
-              duration: 0.2,
-              ease: [0.16, 1, 0.3, 1],
-              opacity: { duration: 0.15 },
-              height: { duration: 0.2 },
-              marginTop: { duration: 0.2 },
-            }}
-            style={{
-              overflow: 'hidden',
-              transformOrigin: 'top',
-            }}>
-            <motion.div
-              initial={{
-                y: -8,
-                opacity: 0,
-              }}
-              animate={{
-                y: 0,
-                opacity: 1,
-              }}
-              exit={{
-                y: -4,
-                opacity: 0,
-              }}
-              transition={{
-                duration: 0.15,
-                delay: 0.05,
-                ease: [0.16, 1, 0.3, 1],
-              }}>
-              <FormMessage className="text-[12px]" />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div>
+      <motion.div
+        variants={variants}
+        initial="hidden"
+        animate={isError ? 'visible' : 'hidden'}
+        transition={{
+          duration: 0.2,
+          ease: 'easeOut',
+        }}
+        style={{
+          overflow: 'hidden',
+        }}>
+        <FormMessage className="text-[12px]" />
+      </motion.div>
     </div>
   );
 };
@@ -135,7 +101,12 @@ function InputFormInner<TFieldValues extends FieldValues>(
             fieldState,
           })
         ) : (
-          <FormItem className={cn(className)}>
+          <FormItem
+            className={cn(
+              `gap-0 [&>*:nth-child(1)]:mt-2 data-[input-label=true]:[&>*:nth-child(2)]:mt-2`,
+              className
+            )}
+            data-input-label={Boolean(label)}>
             {label && <Label htmlFor={name}>{label}</Label>}
             <FormControl>
               {type === 'password' ? (
