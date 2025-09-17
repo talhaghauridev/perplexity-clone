@@ -15,43 +15,20 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from '@/components/ui/sidebar';
+import { SidebarMenuButton, useSidebar } from '@/components/ui/sidebar';
+import { useAuthStore } from '@/stores/auth-store';
+import { User } from '@/types/users';
 import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
-const userObj = {
-  id: 'talha',
-  email: 'talha@gmail.com',
-  name: 'Talha Ghouri',
-
-  profilePicture: null,
-
-  isVerified: true,
-
-  createdAt: '',
-  updatedAt: '',
-  provider: 'EMAIL',
-};
-export default function SidebarUserMenu() {
-  const user = useMemo(() => userObj, [userObj]);
-  return (
-    <SidebarMenu>
-      <SidebarMenuItem>{user && <UserMenu user={user} />}</SidebarMenuItem>
-    </SidebarMenu>
-  );
-}
+import { ThemeMenuItems } from '../shared/theme-menu-items';
 
 interface UserMenuProps {
-  user: any;
+  user: User;
 }
 
-function UserMenu({ user }: UserMenuProps) {
+export function UserMenu({ user }: UserMenuProps) {
   const router = useRouter();
   const { isMobile } = useSidebar();
+  const { logout } = useAuthStore();
   const userName = user.name || 'User';
   const avatarUrl = user.profilePicture;
 
@@ -70,6 +47,7 @@ function UserMenu({ user }: UserMenuProps) {
   };
 
   const handleLogout = async () => {
+    logout();
     router.refresh();
   };
 
@@ -132,7 +110,9 @@ function UserMenu({ user }: UserMenuProps) {
               <Palette className="mr-2 h-4 w-4" />
               <span>Theme</span>
             </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>Hello</DropdownMenuSubContent>
+            <DropdownMenuSubContent>
+              <ThemeMenuItems />
+            </DropdownMenuSubContent>
           </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

@@ -3,6 +3,7 @@ import { shallow } from 'zustand/shallow';
 import { STORAGE_KEYS } from '@/constants/storage-keys';
 import { User } from '@/types/users';
 import Cookies from 'js-cookie';
+
 const COOKIE_OPTIONS = {
   expires: 30,
   secure: process.env.NODE_ENV === 'production',
@@ -22,8 +23,6 @@ interface AuthState {
   setUser: (user: User) => void;
   setToken: (token: string) => void;
   logout: () => void;
-  setSample: (data: any) => void;
-  sample: string | null;
 }
 
 const initialValues = {
@@ -33,17 +32,11 @@ const initialValues = {
   isLoading: false,
   isInitialized: false,
   error: null,
-  sample: null,
 };
 
 export const useAuthStoreInternal = createWithEqualityFn<AuthState>()(
   set => ({
     ...initialValues,
-
-    setSample: () => {
-      set({ sample: 'dsfsdf' });
-    },
-
     initializeAuth: async () => {
       set({ isLoading: true, isInitialized: false });
       try {
@@ -124,13 +117,11 @@ export const useAuthStore = () =>
       isLoading: state.isLoading,
       isInitialized: state.isInitialized,
       error: state.error,
-      sample: state.sample,
       initializeAuth: state.initializeAuth,
       setCredentials: state.setCredentials,
       setUser: state.setUser,
       setToken: state.setToken,
       logout: state.logout,
-      setSample: state.setSample,
     }),
     shallow
   );

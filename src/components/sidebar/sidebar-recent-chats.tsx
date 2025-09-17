@@ -48,7 +48,7 @@ export function SidebarRecentChats() {
                 {recentItems.map((item, index) => (
                   <SidebarMenuItem key={index}>
                     <SidebarMenuButton className="text-sidebar-foreground/80 hover:text-sidebar-foreground h-auto py-2 text-sm">
-                      <span className="truncate">{item}</span>
+                      <span className="truncate text-[13px]">{item}</span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

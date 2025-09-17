@@ -140,7 +140,7 @@ function InputFormInner<TFieldValues extends FieldValues>(
             <FormControl>
               {type === 'password' ? (
                 <PasswordInput
-                  className={cn(inputClassName)}
+                  className={cn('focus-visible:ring-[1.4px]', inputClassName)}
                   ref={ref}
                   id={name}
                   onBlur={onBlur}
@@ -150,7 +150,7 @@ function InputFormInner<TFieldValues extends FieldValues>(
                 />
               ) : (
                 <Input
-                  className={cn(inputClassName)}
+                  className={cn('focus-visible:ring-[1.4px]', inputClassName)}
                   ref={ref}
                   id={name}
                   onBlur={onBlur}

@@ -28,6 +28,7 @@ const useSignIn = () => {
   const { mutateAsync, isPending, error } = useMutation({
     mutationFn: authApi.login,
     onError(error) {
+      console.log({ error });
       toast.error(error.message);
     },
   });
