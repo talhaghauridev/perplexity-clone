@@ -16,10 +16,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SidebarMenuButton, useSidebar } from '@/components/ui/sidebar';
-import { useAuthStore } from '@/stores/auth-store';
 import { User } from '@/types/users';
 import { useRouter } from 'next/navigation';
 import { ThemeMenuItems } from '../shared/theme-menu-items';
+import { useAuthStore } from '@/stores/auth-store';
 
 interface UserMenuProps {
   user: User;
@@ -62,7 +62,7 @@ export function UserMenu({ user }: UserMenuProps) {
               src={avatarUrl}
               alt={userName}
             />
-            <AvatarFallback className="rounded-lg">
+            <AvatarFallback className="rounded-lg text-[13px]">
               {getInitials(userName, user.email)}
             </AvatarFallback>
           </Avatar>
@@ -84,26 +84,22 @@ export function UserMenu({ user }: UserMenuProps) {
                 src={avatarUrl}
                 alt={userName}
               />
-              <AvatarFallback className="rounded-lg">
+              <AvatarFallback className="bg-accent rounded-lg text-[13px]">
                 {getInitials(userName, user.email)}
               </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{user?.name}</span>
-              <span className="truncate text-xs">{user?.email}</span>
+              {/* <span className="truncate text-xs">{user?.email}</span> */}
             </div>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="bg-sidebar-border" />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="text-accent-foreground">
             <UserIcon />
             Account
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Bell />
-            Notifications
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
@@ -115,7 +111,7 @@ export function UserMenu({ user }: UserMenuProps) {
             </DropdownMenuSubContent>
           </DropdownMenuSub>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="bg-sidebar-border" />
         <DropdownMenuItem onClick={handleLogout}>
           <LogOut />
           Log out

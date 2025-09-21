@@ -101,16 +101,12 @@ function InputFormInner<TFieldValues extends FieldValues>(
             fieldState,
           })
         ) : (
-          <FormItem
-            className={cn(
-              `gap-0 [&>*:nth-child(1)]:mt-2 data-[input-label=true]:[&>*:nth-child(2)]:mt-2`,
-              className
-            )}
-            data-input-label={Boolean(label)}>
+          <FormItem className={cn(`gap-0`, className)}>
             {label && <Label htmlFor={name}>{label}</Label>}
             <FormControl>
               {type === 'password' ? (
                 <PasswordInput
+                  containerClassName="mt-2"
                   className={cn('focus-visible:ring-[1.4px]', inputClassName)}
                   ref={ref}
                   id={name}
@@ -121,7 +117,7 @@ function InputFormInner<TFieldValues extends FieldValues>(
                 />
               ) : (
                 <Input
-                  className={cn('focus-visible:ring-[1.4px]', inputClassName)}
+                  className={cn('mt-2 focus-visible:ring-[1.4px]', inputClassName)}
                   ref={ref}
                   id={name}
                   onBlur={onBlur}

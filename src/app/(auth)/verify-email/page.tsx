@@ -1,5 +1,11 @@
 import VerifyEmail from '@/components/auth/verify-email';
 import { InvalidLinkCard } from '@/components/shared/invalid-link-card';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Verify email',
+  description: 'Verify your email address to complete registration',
+};
 
 type PageProps = {
   searchParams: Promise<{

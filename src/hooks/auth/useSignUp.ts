@@ -20,7 +20,7 @@ const useSignup = () => {
   const [isSuccess, setSuccess] = useState(false);
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signupValidationSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
     defaultValues: initialValues,
   });
 

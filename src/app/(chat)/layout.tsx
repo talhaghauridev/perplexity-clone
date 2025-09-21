@@ -19,8 +19,6 @@ function getUserFromCookies(userCookie: any) {
 export default async function SidebarLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const isCollapsed = cookieStore.get(STORAGE_KEYS.SIDEBAR_COOKIE_NAME)?.value !== 'true';
-  const user = getUserFromCookies(cookieStore.get(STORAGE_KEYS.AUTH.USER_DATA)?.value);
-
   return (
     <SidebarProvider defaultOpen={!isCollapsed}>
       <AppSidebar />

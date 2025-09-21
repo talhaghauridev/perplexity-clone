@@ -18,7 +18,7 @@ const useForgotPassword = () => {
   const router = useRouter();
   const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordValidationSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
     defaultValues: initialValues,
   });
 

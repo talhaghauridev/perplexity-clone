@@ -3,6 +3,7 @@ import { SidebarNavigation } from './sidebar-navigation';
 import { SidebarRecentChats } from './sidebar-recent-chats';
 import { SidebarHeader } from './sidebar-header';
 import { SidebarFooter } from './sidebar-footer';
+import { User } from '@/types/users';
 
 export default function AppSidebar() {
   return (

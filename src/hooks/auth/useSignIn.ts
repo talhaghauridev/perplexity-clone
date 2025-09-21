@@ -19,7 +19,7 @@ const useSignIn = () => {
   const router = useRouter();
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signinValidationSchema),
-    mode: 'onChange',
+    mode: 'onSubmit',
     defaultValues: initialValues,
   });
 

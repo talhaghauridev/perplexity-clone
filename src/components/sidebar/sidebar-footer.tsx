@@ -5,26 +5,33 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import SidebarUserMenu from '../sidebar-user-menu';
-import { User } from '@/types/users';
-import { useAuthStore } from '@/stores/auth-store';
-import { useMemo } from 'react';
+import { useAuthState } from '@/lib/auth-provider';
+import { CircleUser } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '../ui/button';
 import { UserMenu } from './user-menu';
-type SidebarUserMenuProps = { initialUser?: User | null };
 
-export function SidebarFooter({ initialUser }: SidebarUserMenuProps) {
-  const { user: clientUser } = useAuthStore();
-
-  const user = useMemo(() => clientUser || initialUser, [clientUser, initialUser]);
+export function SidebarFooter() {
+  const { user, isAuthenticated, isLoading, isInitialized } = useAuthState();
+  console.log({ isLoading, isInitialized, user, isAuthenticated });
   return (
-    user && (
-      <SidebarFooterComponent>
+    <SidebarFooterComponent>
+      {user ? (
         <SidebarMenu>
           <SidebarMenuItem>
             <UserMenu user={user} />
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooterComponent>
-    )
+      ) : (
+        <Button className="mx-2 flex group-data-[collapsible=icon]:mx-0">
+          <Link
+            href={'/sign-in'}
+            className="flex w-full items-center justify-center gap-1">
+            <CircleUser />
+            <span className="truncate group-data-[collapsible=icon]:hidden">Sign In</span>
+          </Link>
+        </Button>
+      )}
+    </SidebarFooterComponent>
   );
 }
