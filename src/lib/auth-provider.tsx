@@ -46,8 +46,8 @@ export function AuthProvider({
   }, [serverUser, serverToken, hasInitializedFromCookies, store]);
 
   const contextValue: AuthContextType = {
-    user: serverUser || store.user,
-    accessToken: serverToken || store.accessToken,
+    user: store.user || serverUser,
+    accessToken: store.accessToken || serverToken,
     isAuthenticated: !!(serverUser && serverToken) || store.isAuthenticated,
     isLoading: serverUser && serverToken ? false : store.isLoading,
     isInitialized: serverUser && serverToken ? true : store.isInitialized,
