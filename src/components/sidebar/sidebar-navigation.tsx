@@ -37,7 +37,7 @@ export function SidebarNavigation() {
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
-      <SidebarSeparator className="group-data-[collapsible=icon]:hidden" />
+      <SidebarSeparator className="ml-0 group-data-[collapsible=icon]:hidden" />
     </>
   );
 }

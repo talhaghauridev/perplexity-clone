@@ -58,6 +58,7 @@
   --spacing: 0.25rem;
   --thumb-color: oklch(0.64 0 0);
   --thumb-hover-color: oklch(0.54 0 0);
+  --chat-input-bg: #fefefb;
 }
 
 .dark {
@@ -112,6 +113,7 @@
   --shadow-2xl: 0 1px 3px -1px hsl(0 0% 0% / 0.5);
   --thumb-color: oklch(0.36 0 0);
   --thumb-hover-color: oklch(0.46 0 0);
+  --chat-input-background: oklch(0.2457 0.003 196.9623);
 }
 
 @theme inline {
@@ -147,6 +149,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-chat-input-bg: var(--chat-i)
 
   --font-sans: var(--font-FKGrotesk);
   --font-mono: var(--font-mono);
