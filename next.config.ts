@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  reactCompiler: true,
   images: {
     remotePatterns: [
       {
@@ -9,9 +10,6 @@ const nextConfig: NextConfig = {
     ],
   },
   transpilePackages: ['@t3-oss/env-nextjs', '@t3-oss/env-core'],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
