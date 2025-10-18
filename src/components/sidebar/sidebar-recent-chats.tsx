@@ -56,7 +56,7 @@ export function SidebarRecentChats() {
     isVerified: true,
     createdAt: new Date('2024-01-01T10:00:00Z').toISOString(),
     updatedAt: new Date('2024-06-01T15:30:00Z').toISOString(),
-    provider: 'google' as 'google',
+    provider: 'google' as const,
   };
   const router = useRouter();
   const handleSetUser = () => {
