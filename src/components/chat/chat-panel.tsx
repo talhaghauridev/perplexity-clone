@@ -1,205 +1,156 @@
 'use client';
+import React, { useRef, useState, useEffect } from 'react';
+import { Send, Square, Mic, Paperclip } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import Textarea from 'react-textarea-autosize';
-
-import { ArrowUp, ChevronDown, MessageCirclePlus, Square } from 'lucide-react';
-
-import { cn } from '@/lib/utils';
-import { Button } from '../ui/button';
-import { ModelSelector } from '../shared/model-selector';
-import { SearchModeToggle } from '../shared/search-mode-toggle';
-import { EmptyScreen } from '../shared/empty-screen';
-
+// Simplified props interface
 interface ChatPanelProps {
-  input: string;
-  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (message: string) => void;
   isLoading: boolean;
-  messages: any[];
-  setMessages: (messages: any[]) => void;
-  query?: string;
-  stop: () => void;
-  append: (message: any) => void;
-  /** Whether to show the scroll to bottom button */
-  showScrollToBottomButton: boolean;
-  /** Reference to the scroll container */
-  scrollContainerRef: React.RefObject<HTMLDivElement>;
+  disabled?: boolean;
+  placeholder?: string;
+  initialValue?: string;
 }
 
 export function ChatPanel({
-  input,
-  handleInputChange,
-  handleSubmit,
+  onSubmit,
   isLoading,
-  messages,
-  setMessages,
-  query,
-  stop,
-  append,
-  showScrollToBottomButton,
-  scrollContainerRef,
+  disabled = false,
+  placeholder = 'Ask anything or @mention a Space',
+  initialValue = '',
 }: ChatPanelProps) {
-  const [showEmptyScreen, setShowEmptyScreen] = useState(false);
-  const router = useRouter();
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const isFirstRender = useRef(true);
-  const [isComposing, setIsComposing] = useState(false); // Composition state
-  const [enterDisabled, setEnterDisabled] = useState(false); // Disable Enter after composition ends
+  const [input, setInput] = useState(initialValue);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const queryClient = useQueryClient();
 
-  const handleCompositionStart = () => setIsComposing(true);
-
-  const handleCompositionEnd = () => {
-    setIsComposing(false);
-    setEnterDisabled(true);
-    setTimeout(() => {
-      setEnterDisabled(false);
-    }, 300);
-  };
-
-  const handleNewChat = () => {
-    setMessages([]);
-    router.push('/');
-  };
-
-  const isToolInvocationInProgress = () => {
-    if (!messages.length) return false;
-
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage.role !== 'assistant' || !lastMessage.parts) return false;
-
-    const parts = lastMessage.parts;
-    const lastPart = parts[parts.length - 1];
-
-    return lastPart?.type === 'tool-invocation' && lastPart?.toolInvocation?.state === 'call';
-  };
-
-  // if query is not empty, submit the query
+  // Auto-resize textarea
   useEffect(() => {
-    if (isFirstRender.current && query && query.trim().length > 0) {
-      append({
-        role: 'user',
-        content: query,
-      });
-      isFirstRender.current = false;
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
+  }, [input]);
 
-  // Scroll to the bottom of the container
-  const handleScrollToBottom = () => {
-    const scrollContainer = scrollContainerRef.current;
-    if (scrollContainer) {
-      scrollContainer.scrollTo({
-        top: scrollContainer.scrollHeight,
-        behavior: 'smooth',
-      });
+  const handleSubmit = () => {
+    const trimmedInput = input.trim();
+    if (trimmedInput && !isLoading && !disabled) {
+      onSubmit(trimmedInput);
+      setInput('');
     }
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
+  const canSubmit = input.trim().length > 0 && !isLoading && !disabled;
 
   return (
-    <div
-      className={cn(
-        'bg-background group/form-container w-full shrink-0',
-        messages.length > 0 ? 'sticky bottom-0 px-2 pb-4' : 'px-6'
-      )}>
-      {messages.length === 0 && (
-        <div className="mb-10 flex flex-col items-center gap-4">
-          <p className="text-center text-3xl font-semibold">How can I help you today?</p>
-        </div>
-      )}
-      <form
-        onSubmit={handleSubmit}
-        className={cn('relative mx-auto w-full max-w-3xl')}>
-        {/* Scroll to bottom button - only shown when showScrollToBottomButton is true */}
-        {showScrollToBottomButton && messages.length > 0 && (
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            className="absolute -top-10 right-4 z-20 size-8 rounded-full shadow-md"
-            onClick={handleScrollToBottom}
-            title="Scroll to bottom">
-            <ChevronDown size={16} />
-          </Button>
-        )}
+    <div className="mx-auto w-full max-w-4xl p-4">
+      <div className="relative">
+        <div className="relative flex items-end rounded-xl border border-gray-200 bg-white shadow-sm transition-colors focus-within:border-blue-500">
+          {/* Left icons */}
+          <div className="flex items-center gap-2 pb-3 pl-4">
+            <button
+              type="button"
+              className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              title="Search">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              title="Focus">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              title="Attach">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </button>
+          </div>
 
-        <div className="bg-muted border-input relative flex w-full flex-col gap-2 rounded-3xl border">
-          <Textarea
-            ref={inputRef}
-            name="input"
-            rows={2}
-            maxRows={5}
-            tabIndex={0}
-            onCompositionStart={handleCompositionStart}
-            onCompositionEnd={handleCompositionEnd}
-            placeholder="Ask a question..."
-            spellCheck={true}
+          {/* Textarea */}
+          <textarea
+            ref={textareaRef}
             value={input}
-            disabled={isLoading || isToolInvocationInProgress()}
-            className="placeholder:text-muted-foreground min-h-12 w-full resize-none border-0 bg-transparent p-4 text-sm focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-            onChange={e => {
-              handleInputChange(e);
-              setShowEmptyScreen(e.target.value.length === 0);
-            }}
-            onKeyDown={e => {
-              if (e.key === 'Enter' && !e.shiftKey && !isComposing && !enterDisabled) {
-                if (input.trim().length === 0) {
-                  e.preventDefault();
-                  return;
-                }
-                e.preventDefault();
-                const textarea = e.target as HTMLTextAreaElement;
-                textarea.form?.requestSubmit();
-              }
-            }}
-            onFocus={() => setShowEmptyScreen(true)}
-            onBlur={() => setShowEmptyScreen(false)}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={placeholder}
+            disabled={disabled || isLoading}
+            className="max-h-[120px] min-h-[44px] flex-1 resize-none border-0 bg-transparent px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none"
+            rows={1}
           />
 
-          {/* Bottom menu area */}
-          <div className="flex items-center justify-between p-3">
-            <div className="flex items-center gap-2">
-              {/* <ModelSelector models={models || []} /> */}
-              <SearchModeToggle />
-            </div>
-            <div className="flex items-center gap-2">
-              {messages.length > 0 && (
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={handleNewChat}
-                  className="group shrink-0 rounded-full"
-                  type="button"
-                  disabled={isLoading || isToolInvocationInProgress()}>
-                  <MessageCirclePlus className="size-4 transition-all group-hover:rotate-12" />
-                </Button>
-              )}
-              <Button
-                type={isLoading ? 'button' : 'submit'}
-                size={'icon'}
-                variant={'outline'}
-                className={cn(isLoading && 'animate-pulse', 'rounded-full')}
-                disabled={(input.length === 0 && !isLoading) || isToolInvocationInProgress()}
-                onClick={isLoading ? stop : undefined}>
-                {isLoading ? <Square size={20} /> : <ArrowUp size={20} />}
-              </Button>
-            </div>
+          {/* Right icons */}
+          <div className="flex items-center gap-2 pr-4 pb-3">
+            <button
+              type="button"
+              className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              title="Attach file">
+              <Paperclip className="h-4 w-4" />
+            </button>
+
+            <button
+              type="button"
+              className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              title="Voice input">
+              <Mic className="h-4 w-4" />
+            </button>
+
+            {/* Submit button */}
+            <button
+              onClick={handleSubmit}
+              disabled={!canSubmit}
+              className={`rounded-lg p-2 transition-all ${
+                canSubmit
+                  ? 'bg-teal-600 text-white hover:bg-teal-700'
+                  : 'cursor-not-allowed bg-gray-100 text-gray-400'
+              }`}
+              title={isLoading ? 'Stop' : 'Send'}>
+              {isLoading ? <Square className="h-4 w-4" /> : <Send className="h-4 w-4" />}
+            </button>
           </div>
         </div>
-
-        {messages.length === 0 && (
-          <EmptyScreen
-            submitMessage={message => {
-              handleInputChange({
-                target: { value: message },
-              } as React.ChangeEvent<HTMLTextAreaElement>);
-            }}
-            className={cn(showEmptyScreen ? 'visible' : 'invisible')}
-          />
-        )}
-      </form>
+      </div>
     </div>
   );
 }
