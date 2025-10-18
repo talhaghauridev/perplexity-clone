@@ -46,7 +46,7 @@ export default function VerifyEmail() {
           <XCircle className="h-8 w-8 text-red-600" />
           Verification failed
         </CardTitle>
-        <CardDescription>We couldn't verify your email address</CardDescription>
+        <CardDescription>We couldn{"'"}t verify your email address</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-muted-foreground text-center text-sm">

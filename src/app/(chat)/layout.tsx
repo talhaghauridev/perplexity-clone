@@ -5,17 +5,6 @@ import { STORAGE_KEYS } from '@/constants/storage-keys';
 import { cookies } from 'next/headers';
 import React from 'react';
 
-function getUserFromCookies(userCookie: any) {
-  if (userCookie) {
-    try {
-      return JSON.parse(userCookie);
-    } catch {
-      return null;
-    }
-  }
-  return null;
-}
-
 export default async function SidebarLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const isCollapsed = cookieStore.get(STORAGE_KEYS.SIDEBAR_COOKIE_NAME)?.value !== 'true';

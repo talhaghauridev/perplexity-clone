@@ -6,7 +6,6 @@ import useForgotPassword from '@/hooks/auth/useForgotPassword';
 import Link from 'next/link';
 import { FormInput } from '../shared/input-form';
 import { Form } from '../ui/form';
-import Logo from '@/lib/logo';
 
 export function ForgotPasswordForm() {
   const { form, isLoading, onSubmit } = useForgotPassword();

@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { PasswordInput } from '../ui/password-input';
 
 const FormContext = React.createContext<{
-  control: Control<any> | null;
+  control: Control<FieldValues> | null;
 }>({
   control: null,
 });
@@ -23,9 +23,9 @@ interface InputFormProps<TFieldValues extends FieldValues>
   inputClassName?: string;
   renderInput?: (props: {
     field: {
-      onChange: (...event: any[]) => void;
+      onChange: (...event: unknown[]) => void;
       onBlur: () => void;
-      value: any;
+      value: unknown;
     };
     fieldState: {
       invalid: boolean;
@@ -44,7 +44,7 @@ const variants = {
   hidden: { opacity: 0, height: 0, marginTop: 0 },
 };
 
-const AnimatedFormMessage = ({ fieldState }: { fieldState: any }) => {
+const AnimatedFormMessage = ({ fieldState }: { fieldState: { error?: { message?: string } } }) => {
   const isError = useMemo(
     () => fieldState.error && fieldState.error?.message,
     [fieldState.error?.message]

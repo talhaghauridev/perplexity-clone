@@ -20,15 +20,6 @@ const useEmailVerification = () => {
     mutationFn: authApi.verifyEmail,
   });
 
-  useEffect(() => {
-    if (!token || !email) {
-      setStatus('invalid');
-      return;
-    }
-
-    handleVerification();
-  }, [token, email]);
-
   const handleVerification = async () => {
     if (!token || !email) {
       setStatus('invalid');
@@ -54,6 +45,15 @@ const useEmailVerification = () => {
       setStatus('error');
     }
   };
+
+  useEffect(() => {
+    if (!token || !email) {
+      setStatus('invalid');
+      return;
+    }
+
+    handleVerification();
+  }, [token, email]);
 
   const retryVerification = () => {
     handleVerification();

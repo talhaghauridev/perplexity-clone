@@ -9,11 +9,16 @@ interface ChatMessage {
 interface ChatRequest {
   chat_id?: string | null;
   messages: ChatMessage[];
-  [key: string]: any;
+  model?: string;
+  search_mode?: boolean;
+  search_query?: string;
+  [key: string]: string | boolean | ChatMessage[] | undefined | null;
 }
 
 // Helper function to create SSE data format
-function createSSEData(data: any): string {
+function createSSEData(
+  data: { text?: string; status?: string; done?: boolean } | string | Record<string, unknown>
+): string {
   return `data: ${JSON.stringify(data)}\n\n`;
 }
 

@@ -1,7 +1,7 @@
 'use client';
-import React, { useRef, useState, useEffect } from 'react';
-import { Send, Square, Mic, Paperclip } from 'lucide-react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import { Mic, Paperclip, Send, Square } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Simplified props interface
 interface ChatPanelProps {
