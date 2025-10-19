@@ -5,6 +5,7 @@ node_modules/
 
 # Next.js build output
 .next/
+.expo/
 out/
 
 # Production builds
@@ -32,6 +33,7 @@ lerna-debug.log*
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+*.lock
 
 # IDE/Editor files
 .vscode/
